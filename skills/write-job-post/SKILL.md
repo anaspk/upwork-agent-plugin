@@ -37,7 +37,7 @@ Call `list_accounts` and choose an account whose raw `role` is `CLIENT`. Job pos
 4. Propose a small set of job-specific screening questions and let the client revise or remove them.
 5. Ask whether to set preferred qualifications, such as Job Success Score, English proficiency, location or timezone, earnings, hours worked, portfolio, Rising Talent, or languages. Explain that a required location can exclude otherwise qualified applicants. Never set a qualification the client did not ask for.
 6. Ask who should see the post. The server requires an explicit visibility choice and refuses to guess, because a wrong value silently makes the job private. Offer the options in plain language — anyone including search engines, registered Upwork users only, or invited freelancers only — and recommend the most open option if the client has no preference.
-7. If files belong on the posting, start an upload in the `job` context, poll its status until it reports ready, confirm it with `confirm_attachment_upload` if it came through the fallback URL, and pass the resulting `file_uid` values to the posting.
+7. If files belong on the posting, start an upload in the `job` context. An inline upload returns stored `file_uid` values directly; a fallback-URL upload must be polled until its status is `ok` and then confirmed with `confirm_attachment_upload`. Pass the resulting `file_uid` values to the posting.
 
 ## Publish
 

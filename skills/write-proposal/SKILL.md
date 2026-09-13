@@ -49,7 +49,7 @@ Use only what the tools return. Never invent clients, praise, metrics, credentia
    - Address material risks, constraints, and every screening question separately.
    - Close with a useful next step.
 3. If the job requires another language, provide the proposal in English and in that language.
-4. Always offer attachments rather than silently skipping the question. For a local file, start an upload in the `proposals` context, poll its status until it reports ready, confirm it with `confirm_attachment_upload` if it came through the fallback URL, and pass the resulting `file_uid` values to the proposal. Also offer relevant portfolio projects and certificates from `list_highlights`.
+4. Always offer attachments rather than silently skipping the question. For a local file, start an upload in the `proposals` context for a normal application, or the `invitation` context when accepting a client invitation. An inline upload returns stored `file_uid` values directly; a fallback-URL upload must be polled until its status is `ok` and then confirmed with `confirm_attachment_upload`. Pass the resulting `file_uid` values to the proposal. Also offer relevant portfolio projects and certificates from `list_highlights`.
 5. Use the exact bid the user approved, passed as a number for `charged_amount`. Never substitute a market rate or infer monetary terms.
 
 ## Submit
@@ -65,7 +65,7 @@ Use only what the tools return. Never invent clients, praise, metrics, credentia
    - what other applicants bid (`bid_stats`) only when the preview includes it. It is a Freelancer Plus feature; when `bid_stats_available` is false, relay the accompanying note and never estimate the amounts;
    - `boost.suggested_bid`, if present, only with its own note. Its figures are percentiles of winning bids on similar jobs from the past week, not bids on this job and not competitor behaviour, so never restate a percentile as a share of applicants. `boost.current_top_bids` is the only field that shows real bids on this job;
    - the boost recommendation, its availability, and the Connects balance.
-4. Let the user decide whether and how much to boost. The recommended amount is the smallest bid that secures a top slot and is often a single Connect. Apply only the amount the user approved and never more than the preview's `boost.max_boost_connects`, which is the balance left after the proposal's own Connects cost, not the full balance. Skip the offer entirely when the preview recommends skipping.
+4. Let the user decide whether and how much to boost. The recommendation targets the smallest top-slot bid when affordable, but may be capped by `max_boost_connects`; relay the preview's rationale when it says the boost may not rank. Apply only the amount the user approved and never more than the preview's `boost.max_boost_connects`, which is the balance left after the proposal's own Connects cost, not the full balance. Skip the offer entirely when the preview recommends skipping.
 5. If any content or terms change, call action `create` again with the corrected values. The new preview supersedes the pending one and its `preview_id` replaces the old. Never edit the server-stored parameters.
 6. Get a separate explicit approval to submit, then call `confirm_draft` with action `confirm`, the `type` the preview returned, and only the returned `preview_id`. A new application and an invitation response return different types, so use whichever came back rather than assuming.
 7. To verify, list the freelancer's proposals filtered to pending ones.

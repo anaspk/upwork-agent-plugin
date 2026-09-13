@@ -55,7 +55,7 @@ Proceed only after the client chooses. The choice determines how the offer's sou
 1. Check the proposal's status first. An offer cannot be created when a pending or draft offer already exists, and a proposal already showing as offered means one does.
 2. Confirm the terms with the client explicitly: title, description, fixed-price milestones or hourly rate, weekly hour limit, whether manual time is allowed, and start and end dates. Use their exact amounts. Never supply a market rate or a plausible-looking default.
 3. Call `manage_offers` action `create_draft`. Read its required fields from `get_tool_help`; the freelancer's organization can be resolved from their profile key, but pass the organization directly when the freelancer belongs to several and the right one is known.
-4. To attach files, start an upload in the `offer` context, poll its status until ready, confirm it with `confirm_attachment_upload` if it came through the fallback URL, and pass the resulting `file_uid` values.
+4. To attach files, start an upload in the `offer` context. An inline upload returns stored `file_uid` values directly; a fallback-URL upload must be polled until its status is `ok` and then confirmed with `confirm_attachment_upload`. Pass the resulting `file_uid` values to the offer.
 5. The response returns a `finalize_url`. **The offer has not been sent.** The client must open that link on Upwork to review, fund, and send it. Present the link, say plainly what remains to be done, and never confirm an offer as a draft or claim it went out.
 6. Track and withdraw offers through `manage_offers` or `list_offers`. Withdrawing needs confirmation like any other write.
 
