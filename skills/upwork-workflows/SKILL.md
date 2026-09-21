@@ -4,7 +4,7 @@ description: Orchestrates reliable multi-step workflows with the Upwork MCP serv
 compatibility: Requires the Upwork MCP server with toolset version 1.0 or later and an authenticated Upwork account.
 metadata:
   author: Upwork
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Orchestrate Upwork MCP workflows
@@ -42,7 +42,7 @@ Messaging, offers, contracts, account details, and file uploads are available to
 
 Read current state first so an action is never stale or duplicated. Confirm the exact actions with `get_tool_help`; what matters here is the order.
 
-- Post a job: review prior postings for tone and structure, get rate insights for an hourly budget, create the draft, then confirm.
+- Post a job: first list saved drafts and ask whether to continue one or start a new post. Get rate insights for an hourly budget, prepare the new-post preview, confirm it to save a real draft, and publish only through a separately approved `post_job` update with `status: published`.
 - Review applicants: get the owning posting's id from the client's own postings list first, then list that posting's proposals. A marketplace job id will not work here.
 - Hire: ask whether the user wants a direct offer or an invitation first, then act. Never infer which from the fact that you already hold the freelancer's ids.
 - Apply to a job: read the job, then rule out an existing invitation *and* an existing proposal, then gather profile evidence, then draft, then confirm. Answer an invitation through its own accept or decline action rather than a fresh application, which Upwork rejects as a duplicate.
@@ -65,11 +65,12 @@ Read each field's description from `get_tool_help` for which form it wants, rath
 
 ## Protect writes
 
-- Treat any tool with `read_only=false` as write-capable. Show the exact action and get explicit user confirmation before each one. Confirm each write separately, even if the user says to approve everything. A user can relax this for a specific tool with `set_tool_permission` (`always_allow`, search/execute mode only); do so only at their explicit request, and note that it never bypasses the separate `confirm_draft` step.
-- Draft-confirm tools return a preview plus a `preview_id` and do not perform the marketplace action. Present the full preview, especially amounts, dates, limits, visibility, recipients, and attachments, then get a second explicit approval and call `confirm_draft` with action `confirm`, the `type` the preview returned, and the returned `preview_id`. Never rebuild or edit stored confirmation parameters.
+- Treat any tool with `read_only=false` as write-capable. Show the exact action and get explicit user confirmation before each one. Confirm each write separately, even if the user says to approve everything. A user can relax this for a specific tool with `set_tool_permission` (`always_allow`, search/execute mode only); do so only at their explicit request, and note that it never bypasses the separate `confirm_preview` step.
+- Preview-confirm tools return a preview plus a `preview_id` and do not perform the marketplace action. Present the full preview, especially amounts, dates, limits, visibility, recipients, and attachments, then get a second explicit approval and call `confirm_preview` with action `confirm`, the `type` the preview returned, and the returned `preview_id`. Never rebuild or edit stored confirmation parameters. `confirm_draft` is a deprecated compatibility alias; use `confirm_preview` in new workflows.
 - A preview is short-lived; the response reports `expires_at` and `ttl_seconds`. If it has expired, run the creating action again rather than confirming a stale id.
-- Only one pending preview is held per preview type for the authenticated person and organization; separate accounts and preview types do not share a slot. There is no edit-in-place tool: to change anything, call the creating action again with the corrected values. The new preview supersedes the old one (`supersedes_previous_preview: true`) and the previous `preview_id` becomes invalid, so present the revised preview and get fresh approval before confirming it. Never start a second change of the same preview type under the same account while the user is still deciding on the first. `get_draft` reads a pending preview without consuming it.
-- `confirm_draft` never accepts an offer. A freelancer's `respond_to_offer` decline and request-changes are previews; accept is binding and returns a `finalize_url`.
+- Only one pending preview is held per preview type for the authenticated person and organization; separate accounts and preview types do not share a slot. There is no edit-in-place tool: to change anything, call the creating action again with the corrected values. The new preview supersedes the old one (`supersedes_previous_preview: true`) and the previous `preview_id` becomes invalid, so present the revised preview and get fresh approval before confirming it. Never start a second change of the same preview type under the same account while the user is still deciding on the first. `get_preview` reads a pending preview without consuming it; `get_draft` is its deprecated compatibility alias.
+- Job posting creation is the exception to any assumption that confirmation makes the intended object live. `post_job` action `create_draft` returns a preview with type `job_posting`; confirming it saves a real **DRAFT** and never publishes. To publish, call `post_job` action `update` on that draft with `status: published`, present the new preview and publication warning, obtain separate approval, and confirm type `job_update`. Publication returns a new `job_id`, and the draft id stops working.
+- `confirm_preview` never accepts an offer. A freelancer's `respond_to_offer` decline and request-changes are previews; accept is binding and returns a `finalize_url`.
 - Other write tools execute on a single confirmed call, with no draft step.
 - Money movement and legally binding steps are never completed by this server. They return `status: action_required` and a `finalize_url` the user must open on Upwork. Treat this as a category: if an action would move money or bind a party, expect a link. Check for `finalize_url` before claiming any write succeeded, present it, and say what remains to be done. Reversible changes, such as pausing or ending a contract or declining an offer, do run through the server as normal drafts.
 - Use the exact amounts and terms the user stated. Never substitute a market rate or a plausible-looking default.

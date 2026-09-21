@@ -4,7 +4,7 @@ description: Researches an Upwork job and a freelancer's real experience to crea
 compatibility: Requires the Upwork MCP server with toolset version 1.0 or later and an authenticated Upwork freelancer or agency account.
 metadata:
   author: Upwork
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Write an Upwork proposal
@@ -49,7 +49,7 @@ Use only what the tools return. Never invent clients, praise, metrics, credentia
    - Address material risks, constraints, and every screening question separately.
    - Close with a useful next step.
 3. If the job requires another language, provide the proposal in English and in that language.
-4. Always offer attachments rather than silently skipping the question. For a local file, start an upload in the `proposals` context for a normal application, or the `invitation` context when accepting a client invitation. An inline upload returns stored `file_uid` values directly; a fallback-URL upload must be polled until its status is `ok` and then confirmed with `confirm_attachment_upload`. Pass the resulting `file_uid` values to the proposal. Also offer relevant portfolio projects and certificates from `list_highlights`.
+4. Always offer attachments rather than silently skipping the question. For a local file, start an upload in the `proposals` context for a normal application, or the `invitation` context when accepting a client invitation. An inline upload returns stored `file_uid` values directly; a fallback-URL upload must be polled until its status is `ok` and then confirmed with `confirm_attachment_upload`. Pass the resulting `file_uid` values to the proposal. For a `TALENT` account, also offer relevant portfolio projects and certificates from `get_profile` action `list_highlights`. Do not call `list_highlights` for an `FL_AGENCY` account; use the agency profile evidence already returned by `get_agency` instead.
 5. Use the exact bid the user approved, passed as a number for `charged_amount`. Never substitute a market rate or infer monetary terms.
 
 ## Submit
@@ -67,7 +67,7 @@ Use only what the tools return. Never invent clients, praise, metrics, credentia
    - the boost recommendation, its availability, and the Connects balance.
 4. Let the user decide whether and how much to boost. The recommendation targets the smallest top-slot bid when affordable, but may be capped by `max_boost_connects`; relay the preview's rationale when it says the boost may not rank. Apply only the amount the user approved and never more than the preview's `boost.max_boost_connects`, which is the balance left after the proposal's own Connects cost, not the full balance. Skip the offer entirely when the preview recommends skipping.
 5. If any content or terms change, call action `create` again with the corrected values. The new preview supersedes the pending one and its `preview_id` replaces the old. Never edit the server-stored parameters.
-6. Get a separate explicit approval to submit, then call `confirm_draft` with action `confirm`, the `type` the preview returned, and only the returned `preview_id`. A new application and an invitation response return different types, so use whichever came back rather than assuming.
+6. Get a separate explicit approval to submit, then call `confirm_preview` with action `confirm`, the `type` the preview returned, and only the returned `preview_id`. A new application and an invitation response return different types, so use whichever came back rather than assuming.
 7. To verify, list the freelancer's proposals filtered to pending ones.
 
 If Connects are insufficient, say so plainly and let the user add Connects, then retry. Do not describe the failure as permanent.
