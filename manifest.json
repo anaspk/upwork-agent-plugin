@@ -6,8 +6,8 @@
     "developer": {
         "name": "Upwork",
         "websiteUrl": "https://www.upwork.com/ai/mcp",
-        "privacyUrl": "https://contoso.com/privacy",
-        "termsOfUseUrl": "https://contoso.com/terms"
+        "privacyUrl": "https://privacy.upwork.com/policies",
+        "termsOfUseUrl": "https://www.upwork.com/legal#apimcpterms"
     },
     "name": {
         "short": "Upwork Agent Plugin",
