@@ -104,7 +104,7 @@ zip -r upwork-agent-plugin.zip manifest.json color.png outline.png skills/
 4. Sign in to your work account and install the agent package. Replace the file path with the location of your ZIP package:
 
    ```bash
-   atk install --file-path "/path/to/upwork-agent-plugin-m365.zip" --scope Personal
+   atk install --file-path "/path/to/upwork-agent-plugin.zip" --scope Personal
    ```
 
    A successful installation returns output that includes a `TitleId` and `AppId` for your account.
