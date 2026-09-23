@@ -78,7 +78,7 @@ git clone https://github.com/upwork/upwork-agent-plugin \
 Build a package by running the following command:
 
 ```bash
-zip -r upwork-agent-plugin-m365.zip manifest.json color.png outline.png skills/
+zip -r upwork-agent-plugin.zip manifest.json color.png outline.png skills/
 ```
 
 [For personal testing](https://learn.microsoft.com/en-us/microsoft-365/copilot/cowork/cowork-plugin-development#step-7-test), sideload the app by using the Microsoft 365 Agents Toolkit command line interface:
