@@ -1,0 +1,51 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/teams/vDevPreview/MicrosoftTeams.schema.json",
+    "manifestVersion": "devPreview",
+    "version": "0.1.0",
+    "id": "914e73b4-3020-5343-a80b-51c06fbba1f4",
+    "developer": {
+        "name": "Upwork",
+        "websiteUrl": "https://www.upwork.com/ai/mcp",
+        "privacyUrl": "https://privacy.upwork.com/policies",
+        "termsOfUseUrl": "https://www.upwork.com/legal#apimcpterms"
+    },
+    "name": {
+        "short": "Upwork Agent Plugin",
+        "full": "Upwork Agent Plugin"
+    },
+    "description": {
+        "short": "Connects agents to Upwork and provides guided workflows for hiring and finding",
+        "full": "Connects agents to Upwork and provides guided workflows for hiring and finding work."
+    },
+    "icons": {
+        "color": "color.png",
+        "outline": "outline.png"
+    },
+    "accentColor": "#4A90D9",
+    "agentSkills": [
+        {
+            "folder": "./skills/hire-on-upwork"
+        },
+        {
+            "folder": "./skills/upwork-workflows"
+        },
+        {
+            "folder": "./skills/write-job-post"
+        },
+        {
+            "folder": "./skills/write-proposal"
+        }
+    ],
+    "agentConnectors": [
+        {
+            "id": "upwork",
+            "displayName": "upwork MCP Server",
+            "description": "Remote MCP server providing tools for upwork-agent-plugin",
+            "toolSource": {
+                "remoteMcpServer": {
+                    "mcpServerUrl": "https://mcp.upwork.com/mcp"
+                }
+            }
+        }
+    ]
+}
