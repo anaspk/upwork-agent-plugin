@@ -137,6 +137,23 @@ for example:
 The agent must request confirmation before write operations. Draft-based
 workflows require a second confirmation before the final marketplace action.
 
+## Package for OpenAI submission
+
+From the repository root, build and verify a ZIP for the ChatGPT and Codex
+plugin directory:
+
+```bash
+version=$(python3 -c 'import json; print(json.load(open("plugin.json"))["version"])')
+archive="../upwork-agent-plugin-openai-${version}-$(date +%Y%m%d%H%M%S).zip"
+zip -X -r "$archive" plugin.json mcp.json skills color.png outline-48x48.png
+unzip -t "$archive"
+```
+
+The archive contains one plugin root with the portable manifest, MCP server
+configuration, four skills, and referenced icons. Submit this ZIP through the
+**With MCP** path in the [OpenAI plugin submission portal](https://developers.openai.com/plugins/deploy/submission).
+The Microsoft 365 package above uses a different manifest and ZIP.
+
 ## Structure
 
 ```text
