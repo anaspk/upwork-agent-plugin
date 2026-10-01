@@ -20,9 +20,9 @@
   "extensions": {
     "com.openai": {
       "interface": {
-        "displayName": "Upwork Agent Plugin",
+        "displayName": "Upwork",
         "shortDescription": "Hire and find work on Upwork",
-        "longDescription": "Connect agents to Upwork and guide them through account selection, job posts, proposals, hiring, and other multi-step workflows.",
+        "longDescription": "Upwork equips AI agents with skills for the full hiring lifecycle: search and vet freelancer talent, draft clear and effective job posts, write tailored proposals, and manage hiring workflows. Powered by the official Upwork MCP server for secure, real-time access to your Upwork account.\n\nIn order to use this app, you need to have an active Upwork account. Please contact our support team (https://support.upwork.com) for more details.\n\nGet started: sign up or log in at https://www.upwork.com, then install this plugin and connect it to your Upwork account when prompted. A getting-started guide is available at https://www.upwork.com/ai/mcp.\n\nHelp and documentation: https://support.upwork.com",
         "developerName": "Upwork",
         "category": "Productivity",
         "capabilities": [
@@ -31,12 +31,18 @@
           "Write"
         ],
         "websiteURL": "https://www.upwork.com/ai/mcp",
+        "supportURL": "https://support.upwork.com",
+        "privacyPolicyURL": "https://privacy.upwork.com/policies?name=privacy-policy",
+        "termsOfServiceURL": "https://www.upwork.com/legal#apimcpterms",
         "defaultPrompt": [
           "Help me turn this project brief into an Upwork job post.",
           "Write a proposal for this Upwork job using my real work history.",
           "Help me find and hire a freelancer on Upwork."
         ],
-        "brandColor": "#108A00"
+        "brandColor": "#108A00",
+        "composerIcon": "./color.png",
+        "composerIconDark": "./outline-48x48.png",
+        "logo": "./color.png"
       }
     }
   }
