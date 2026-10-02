@@ -43,6 +43,66 @@
         "composerIcon": "./color.png",
         "composerIconDark": "./outline-48x48.png",
         "logo": "./color.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Find remote hourly Python developer jobs paying at least $50 per hour.",
+              "prompt": "Find me remote Python developer jobs on Upwork that pay at least $50 an hour.",
+              "tools_triggered": "list_accounts; find_jobs (action: search). Use get_tool_help when parameter details are needed.",
+              "expected_behavior": "Select the freelancer account, asking which account to use if needed, and search for remote hourly Python developer jobs with a minimum hourly rate of $50. Present matching jobs with their returned titles, hourly budgets, and links. Only claim a job meets the rate and remote-work requirements when supported by the returned data. If no results are returned, report that without inventing jobs or asserting why the search was empty."
+            },
+            {
+              "description": "Summarize freelancer account activity and the current Connects balance.",
+              "prompt": "What's new on my Upwork freelancer account? Any invitations, offers or messages, and how many Connects do I have?",
+              "tools_triggered": "list_accounts; get_freelancer_dashboard (action: check). Use get_tool_help when parameter details are needed.",
+              "expected_behavior": "Select the freelancer account, asking which account to use if needed, and retrieve its dashboard. Summarize returned invitations, offers, and messages, and report the returned Connects balance. Distinguish empty activity from unavailable data and do not respond to invitations, accept offers, or send messages."
+            },
+            {
+              "description": "Search Upwork for WordPress developers.",
+              "prompt": "Find WordPress developers on Upwork.",
+              "tools_triggered": "list_accounts; find_freelancers (action: search). Use get_tool_help when parameter details are needed.",
+              "expected_behavior": "Select the client account, asking which account to use if needed, and search freelancer profiles using a short query such as WordPress developer. Present candidates using returned names, rates, relevant skills, and profile links when available. Disclose boosted placement when indicated, and do not invite or hire anyone."
+            },
+            {
+              "description": "Review proposals received across the client's Upwork job postings.",
+              "prompt": "Show me the proposals I've received on my Upwork job postings.",
+              "tools_triggered": "list_accounts; list_client_proposals (action: list_all). Use get_tool_help when parameter details are needed.",
+              "expected_behavior": "Select the client account, asking which account to use if needed, and retrieve proposals across its job postings. Present proposals grouped by job with returned applicant names, proposal details, and statuses. Report when no proposals are returned and indicate when more results are available. Do not shortlist, decline, or send offers."
+            },
+            {
+              "description": "List the job postings owned by the client's Upwork account.",
+              "prompt": "List the jobs I've posted on Upwork.",
+              "tools_triggered": "list_accounts; get_job_posting (action: list). Use get_tool_help when parameter details are needed.",
+              "expected_behavior": "Select the client account, asking which account to use if needed, and list its own job postings. Present returned job titles, statuses, and links when available. Report when no postings are returned and indicate when more results are available. Do not create, update, or publish a posting."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Local weather is outside the Upwork plugin's job, hiring, and account-management capabilities.",
+              "prompt": "What's the local weather today?",
+              "tools_triggered": "None; no Upwork tools should be called.",
+              "expected_behavior": "Do not activate the Upwork plugin or access the user's Upwork account. Use an appropriate weather capability if available, asking for the user's location if needed, or explain that live weather information is unavailable."
+            },
+            {
+              "description": "Cooking recipes are unrelated to Upwork workflows.",
+              "prompt": "What's a good recipe for vegetarian lasagna?",
+              "tools_triggered": "None; no Upwork tools should be called.",
+              "expected_behavior": "Answer the recipe request using general knowledge or an appropriate non-Upwork capability without activating the Upwork plugin or accessing the user's Upwork account."
+            },
+            {
+              "description": "World Cup results are outside the Upwork plugin's capabilities.",
+              "prompt": "Who won the last World Cup?",
+              "tools_triggered": "None; no Upwork tools should be called.",
+              "expected_behavior": "Do not activate the Upwork plugin or access the user's Upwork account. Clarify which sport or competition is intended if needed, and answer using an appropriate non-Upwork source or capability."
+            }
+          ]
+        },
+        "demo_recording_url": "https://vimeo.com/1216255739/97b8646ff8"
+      },
+      "publication": {
+        "release_notes": "Version 0.1.1 updates the existing Upwork plugin with revised workflow guidance, refreshed listing metadata, and MCP review materials. The package includes version 0.2.0 of all four workflow skills.\n\n- Job posting: Updated guidance to check for saved drafts before creating a posting and to distinguish saving a draft from publishing. Publication requires separate user approval and confirmation; workflows retain the new job identifier returned after publication.\n- Preview and confirmation handling: Updated skills to use confirm_preview and get_preview, distinguish temporary previews from saved drafts, and handle expired or superseded previews. Write operations continue to require explicit user confirmation, and binding or money-moving actions direct users to Upwork for completion.\n- Hiring and proposal review: Clarified profile identifier handling, proposal-detail retrieval, invitation actions, and selection of decline reasons. Added guidance to disclose paid placement and availability signals and to explain the Business Plus requirement for Expert-Vetted filtering.\n- Freelancer and agency proposals: Clarified account-specific use of portfolio highlights and certificates, attachment upload contexts, and confirmation of proposal submissions and invitation responses.\n- Listing and packaging: Refreshed the display name, description, icons, and support, privacy, and terms links. Added instructions for building and verifying the OpenAI submission ZIP.\n- Review materials: Added five positive test cases covering job search, freelancer account activity and Connects, talent search, received proposals, and owned job postings; three negative cases for unrelated requests; and a demo recording link."
       }
     }
   }
