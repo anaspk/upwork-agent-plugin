@@ -73,42 +73,6 @@ git clone https://github.com/upwork/upwork-agent-plugin \
   <your-project>/.agents/plugins/upwork-agent-plugin
 ```
 
-### Microsoft 365 (Copilot/Cowork)
-
-Build a package by running the following command:
-
-```bash
-zip -r upwork-agent-plugin.zip manifest.json color.png outline.png skills/
-```
-
-[For personal testing](https://learn.microsoft.com/en-us/microsoft-365/copilot/cowork/cowork-plugin-development#step-7-test), sideload the app by using the Microsoft 365 Agents Toolkit command line interface:
-
-1. Install `@microsoft/m365agentstoolkit-cli` from npm:
-
-   ```bash
-   npm install -g @microsoft/m365agentstoolkit-cli
-   ```
-
-2. Verify the installation by running:
-
-   ```bash
-   atk --version
-   ```
-
-3. Authenticate with your Microsoft 365 work account:
-
-   ```bash
-   atk auth login
-   ```
-
-4. Sign in to your work account and install the agent package. Replace the file path with the location of your ZIP package:
-
-   ```bash
-   atk install --file-path "/path/to/upwork-agent-plugin.zip" --scope Personal
-   ```
-
-   A successful installation returns output that includes a `TitleId` and `AppId` for your account.
-
 ### Other Agent Plugin-compatible clients
 
 Add this repository URL in the client's plugin installer:
@@ -136,23 +100,6 @@ for example:
 
 The agent must request confirmation before write operations. Draft-based
 workflows require a second confirmation before the final marketplace action.
-
-## Package for OpenAI submission
-
-From the repository root, build and verify a ZIP for the ChatGPT and Codex
-plugin directory:
-
-```bash
-version=$(python3 -c 'import json; print(json.load(open("plugin.json"))["version"])')
-archive="../upwork-agent-plugin-openai-${version}-$(date +%Y%m%d%H%M%S).zip"
-zip -X -r "$archive" plugin.json mcp.json skills color.png outline-48x48.png
-unzip -t "$archive"
-```
-
-The archive contains one plugin root with the portable manifest, MCP server
-configuration, four skills, and referenced icons. Submit this ZIP through the
-**With MCP** path in the [OpenAI plugin submission portal](https://developers.openai.com/plugins/deploy/submission).
-The Microsoft 365 package above uses a different manifest and ZIP.
 
 ## Structure
 
