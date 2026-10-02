@@ -4,7 +4,7 @@ description: Creates clear, specific Upwork job posts and guides clients through
 compatibility: Requires the Upwork MCP server with toolset version 1.0 or later and an authenticated Upwork client account.
 metadata:
   author: Upwork
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Write an Upwork job post
@@ -23,7 +23,7 @@ Call `list_accounts` and choose an account whose raw `role` is `CLIENT`. Job pos
    - must-have skills, as names a freelancer would recognize;
    - fixed-price or hourly, and the client's exact budget;
    - the experience level and expected project length;
-   - for an hourly job, the expected weekly hours;
+   - for an hourly job, the weekly commitment: full time (30+ hours), part time, as needed, or not sure;
    - timeline and collaboration expectations.
 
    Several of these are constrained enums. Read their accepted values from `get_tool_help` rather than inventing a format, and ask the client in plain language rather than reciting codes.
@@ -33,7 +33,7 @@ Call `list_accounts` and choose an account whose raw `role` is `CLIENT`. Job pos
 
 1. Write a specific title and a focused description. The tool enforces a maximum description length and reports it; if the client's own text exceeds it, ask them to shorten it rather than sending it truncated.
 2. Cover scope, deliverables, definition of done, relevant context, and constraints. Never add a requirement the client did not approve.
-3. Pass skills as human-readable names such as `React` or `WordPress`. The server resolves them, matches close variants, and reports anything it could not match.
+3. Pass skills as human-readable names such as `React` or `WordPress`. A close variant is matched to an Upwork skill and reported in `skill_suggestions` with `added_as` `interpreted` (for example `React.js` kept as `React`); mention those so the client can correct them. A name with no confident match is kept as a custom skill (`added_as` `custom`) and does not block the draft; offer the close matches the preview reports.
 4. Propose a small set of job-specific screening questions and let the client revise or remove them.
 5. Ask whether to set preferred qualifications, such as Job Success Score, English proficiency, location or timezone, earnings, hours worked, portfolio, Rising Talent, or languages. Explain that a required location can exclude otherwise qualified applicants. Never set a qualification the client did not ask for.
 6. Ask who should see the post. The server requires an explicit visibility choice and refuses to guess, because a wrong value silently makes the job private. Offer the options in plain language — anyone including search engines, registered Upwork users only, or invited freelancers only — and recommend the most open option if the client has no preference.
@@ -52,10 +52,11 @@ Call `list_accounts` and choose an account whose raw `role` is `CLIENT`. Job pos
 
 ## After publishing
 
-- To collect applicants, get the posting id from `get_job_posting`, then list that posting's proposals with `list_client_proposals` action `list`, or use action `list_all` to span every posting at once.
+- To collect applicants, get the posting id from `get_job_posting`, then list that posting's proposals with `list_client_proposals` action `list`, or use action `list_all` to span every posting at once. Boosted proposals are flagged only on action `list` for a single posting.
 - To invite freelancers, use `find_freelancers` and then `invite_freelancer`. Invitations require the freelancer's numeric person id, not their profile key.
-- To change a live posting, call `post_job` action `update` with the posting id and only the fields to change, then confirm the returned preview with `confirm_preview`. Screening questions can be replaced or explicitly cleared; omitting them leaves them unchanged. `experience_level` can also be changed.
-- To take a posting down, first read the posting and confirm its status still allows removal. If it does not, tell the client the job cannot be removed and stop. When it does, call `post_job` action `close_reasons`, present every returned reason, ask which applies, and pass the client's choice to action `close`. Never pick the reason for them.
+- To change a live posting, call `post_job` action `update` with the posting id and only the fields to change, then confirm the returned preview with `confirm_preview`. Screening questions can be replaced or explicitly cleared; omitting them leaves them unchanged. `experience_level` can also be changed. Pass `duration` only when the client is changing it; otherwise the current duration is kept.
+- To renew a live posting, call `post_job` action `renew`. That moves it back to the top of search. It is allowed 24 hours after posting or the last renewal, at most three times, and it cannot be undone. If the job is not eligible, the response is `status: not_eligible` with `reason`, `next_renewal_at`, and `renewals_left`, and there is no preview — relay that and stop. When it is eligible, present the preview and confirm it with `confirm_preview` using type `job_renew`. Do not re-check eligibility immediately after a successful renew; the posting can still show its pre-renewal state for a few minutes.
+- To take a posting down, first read the posting and confirm its status still allows removal. `CANCELLED` and `FILLED` both appear as Closed in the Upwork UI. `FILLED` was closed after a hire. `CANCELLED` was closed without a hire, which does not by itself mean the client cancelled it. If the status does not allow removal, tell the client the job cannot be removed and stop. When it does, call `post_job` action `close_reasons`, present every returned reason, ask which applies, and pass the client's choice to action `close`. Never pick the reason for them.
 
 ## Quality rules
 
