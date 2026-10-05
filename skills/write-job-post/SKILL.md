@@ -23,7 +23,7 @@ Call `list_accounts` and choose an account whose raw `role` is `CLIENT`. Job pos
    - must-have skills, as names a freelancer would recognize;
    - fixed-price or hourly, and the client's exact budget;
    - the experience level and expected project length;
-   - for an hourly job, the weekly commitment: full time (30+ hours), part time, as needed, or not sure;
+   - for an hourly job, the weekly commitment: full time (30+ hours a week), part time (under 30), as needed, or not sure;
    - timeline and collaboration expectations.
 
    Several of these are constrained enums. Read their accepted values from `get_tool_help` rather than inventing a format, and ask the client in plain language rather than reciting codes.
@@ -55,7 +55,7 @@ Call `list_accounts` and choose an account whose raw `role` is `CLIENT`. Job pos
 - To collect applicants, get the posting id from `get_job_posting`, then list that posting's proposals with `list_client_proposals` action `list`, or use action `list_all` to span every posting at once. Boosted proposals are flagged only on action `list` for a single posting.
 - To invite freelancers, use `find_freelancers` and then `invite_freelancer`. Invitations require the freelancer's numeric person id, not their profile key.
 - To change a live posting, call `post_job` action `update` with the posting id and only the fields to change, then confirm the returned preview with `confirm_preview`. Screening questions can be replaced or explicitly cleared; omitting them leaves them unchanged. `experience_level` can also be changed. Pass `duration` only when the client is changing it; otherwise the current duration is kept.
-- To renew a live posting, call `post_job` action `renew`. That moves it back to the top of search. It is allowed 24 hours after posting or the last renewal, at most three times, and it cannot be undone. If the job is not eligible, the response is `status: not_eligible` with `reason`, `next_renewal_at`, and `renewals_left`, and there is no preview — relay that and stop. When it is eligible, present the preview and confirm it with `confirm_preview` using type `job_renew`. Do not re-check eligibility immediately after a successful renew; the posting can still show its pre-renewal state for a few minutes.
+- To renew a live posting, call `post_job` action `renew`. That moves it back to the top of search. It is allowed 24 hours after posting or the last renewal, three renewals in total, and it cannot be undone. If the job is not eligible, the response is `status: not_eligible` with `reason`, `next_renewal_at`, and `renewals_left`, and there is no preview — relay that and stop. When it is eligible, present the preview and confirm it with `confirm_preview` using type `job_renew`. Do not re-check eligibility immediately after a successful renew; the posting can still show its pre-renewal state for a few minutes.
 - To take a posting down, first read the posting and confirm its status still allows removal. `CANCELLED` and `FILLED` both appear as Closed in the Upwork UI. `FILLED` was closed after a hire. `CANCELLED` was closed without a hire, which does not by itself mean the client cancelled it. If the status does not allow removal, tell the client the job cannot be removed and stop. When it does, call `post_job` action `close_reasons`, present every returned reason, ask which applies, and pass the client's choice to action `close`. Never pick the reason for them.
 
 ## Quality rules

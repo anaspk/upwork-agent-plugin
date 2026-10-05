@@ -1,7 +1,7 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/teams/vDevPreview/MicrosoftTeams.schema.json",
     "manifestVersion": "devPreview",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "id": "914e73b4-3020-5343-a80b-51c06fbba1f4",
     "developer": {
         "name": "Upwork",
