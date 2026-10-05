@@ -39,7 +39,7 @@ For a fast overview of what needs attention, call `get_client_dashboard` action 
 
 ## Talk, then meet
 
-1. Message an applicant with `send_message` action `message_proposal`, passing `job_posting_id` and `proposal_id`. That opens the proposal room. For a room that already exists, use `get_messages` action `find_room` or `list_rooms`, then `send_message` action `send`. A `find_room` not-found is final until a conversation starts; do not retry the same context id.
+1. Message an applicant with `send_message` action `message_proposal`, passing `job_posting_id` and `proposal_id`. That opens the proposal room. For a room that already exists, use `get_messages` action `find_room` or `list_rooms`, then `send_message` action `send`. A `find_room` not-found is final until a conversation starts.
 2. Offer a video call only after the client agrees, and only once that room exists. Use `manage_meetings`, whose actions are `list`, `free_slots`, `request`, `schedule`, `reschedule`, and `cancel`. The other party picks the time: `request` offers the client's bookable times, and `free_slots` is the only source of times that can be booked — never invent one. `windows` is a parameter of `free_slots` and `request`, not an action; it checks the client's own availability and does not limit what the other party is shown. A meeting that is already booked has no accept step; offer to reschedule or cancel it. Every meeting write returns a preview, so confirm it with `confirm_preview` only after a separate approval. Present times in the client's timezone from `get_account`.
 
 ## Ask which path to hiring
@@ -54,7 +54,7 @@ Proceed only after the client chooses. The choice determines how the offer's sou
 ## Invite a freelancer
 
 1. Call `invite_freelancer` action `list_jobs` to see the client's postings and how many invitations remain on each.
-2. Call `invite_freelancer` action `send` with the posting id, the freelancer's numeric person id, and the invitation letter. The letter is required; a blank one is rejected. The person id comes from `find_freelancers` or a profile read. Passing the profile key, a ciphertext, or an organization id is rejected upstream as "Wrong organization type for invited vendor", which does not hint at the real cause.
+2. Call `invite_freelancer` action `send` with the posting id, the freelancer's numeric person id, and the invitation letter. The letter is required; a blank one is rejected. The person id comes from `find_freelancers` or a profile read. Passing a profile key or ciphertext is rejected upstream with a misleading error.
 3. Sending returns a preview. Present it and execute it with `confirm_preview` only after separate approval.
 4. Track responses with `list_client_invitations`, which works one job at a time and needs the posting id. There is no list-all across postings.
 
@@ -71,20 +71,18 @@ If the server returns a disintermediation compliance policy message, present it 
 
 ## Message someone who has not applied
 
-For an applicant, use `message_proposal` as described above. For someone else, use `get_messages` action `find_room`, `list_rooms`, or `search_rooms` (a name or topic in the client's own conversations — not `find_freelancers`). Then `send_message` action `send`. Action `send_to_user` creates a one-on-one room when none exists. Starting a conversation with a freelancer the client is not yet connected to consumes one of a limited number of new connections per day; the response includes `remaining_connections`, so mention the limit before using it. A `messages` upload needs a `room_id`, or `user_id` plus `org_id`, or a `proposal_id`.
+For an applicant, use `message_proposal` as described above. For someone else, use `get_messages` action `find_room`, `list_rooms`, or `search_rooms` (a name or topic in the client's own conversations — not `find_freelancers`). Then `send_message` action `send`. Action `send_to_user` creates a one-on-one room when none exists. Starting a conversation with a freelancer the client is not yet connected to consumes one of a limited number of new connections per day, so mention the limit before using it.
 
 ## Actions that finish on Upwork
 
-Anything that moves money or binds a party returns `status: action_required` and a `finalize_url` rather than performing the action. Sending an offer, funding a milestone, releasing a milestone payment, and changing a contract's weekly hour limit all work this way. Treat it as a category rather than a fixed list: check for `finalize_url` before claiming any write succeeded, present the link, and never report the step as done.
+Anything that moves money or binds a party, such as sending an offer, funding or releasing a milestone, or changing a contract's weekly hour limit, returns `status: action_required` and a `finalize_url`. Present the link and never report the step as done.
 
 Reversible changes do run through the server as normal drafts, including pausing, restarting, and ending a contract. Look up the valid reasons with `list_contracts` before ending one, and let the client choose. Milestone state is read through the contract, because `manage_milestones` is write-only.
 
 ## Quality rules
 
-- Confirm every write separately and immediately before the call, even if the client said to approve everything.
+- Confirm every write separately and immediately before the call.
 - Compare candidates on evidence the tools returned. Never invent rates, availability, ratings, or work history.
-- Reproduce candidate names and job titles verbatim so the same person or posting keeps the same name throughout the conversation.
-- Prefer any `*_label` field over a raw enum or numeric code when presenting results.
-- Never show `org_uid`, `personId`, `profile_key`, or `preview_id` unless the client asks. Share `trace_id` when something fails.
+- Follow the server's presentation rules for names, labels, and identifiers.
 
-In compact tool mode, discover schemas with `search_tools` and `get_tool_help`, then call tools through `execute_tool` with the selected `org_uid` and `role`.
+For tool discovery and compact mode, follow the `upwork-workflows` skill.
