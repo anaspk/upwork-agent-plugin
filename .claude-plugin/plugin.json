@@ -1,7 +1,7 @@
 {
   "name": "upwork-agent-plugin",
   "displayName": "Upwork Agent Plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Connects agents to Upwork and provides guided workflows for hiring and finding work.",
   "author": {
     "name": "Upwork",

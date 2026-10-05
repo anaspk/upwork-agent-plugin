@@ -4,7 +4,7 @@
     "name": "Upwork",
     "url": "https://www.upwork.com/"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "metadata": {
     "description": "Official Upwork Agent Plugin for hiring and finding work through the Upwork MCP server.",
     "repository": "https://github.com/upwork/upwork-agent-plugin",
@@ -23,7 +23,7 @@
         "jobs",
         "mcp"
       ],
-      "version": "0.1.0"
+      "version": "0.1.1"
     }
   ]
 }
