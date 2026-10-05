@@ -1,21 +1,21 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/teams/vDevPreview/MicrosoftTeams.schema.json",
-    "manifestVersion": "devPreview",
-    "version": "0.1.1",
+    "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.30/MicrosoftTeams.schema.json",
+    "manifestVersion": "1.30",
+    "version": "1.0.1",
     "id": "914e73b4-3020-5343-a80b-51c06fbba1f4",
     "developer": {
         "name": "Upwork",
         "websiteUrl": "https://www.upwork.com/ai/mcp",
-        "privacyUrl": "https://privacy.upwork.com/policies",
+        "privacyUrl": "https://privacy.upwork.com/policies?name=privacy-policy",
         "termsOfUseUrl": "https://www.upwork.com/legal#apimcpterms"
     },
     "name": {
-        "short": "Upwork Agent Plugin",
-        "full": "Upwork Agent Plugin"
+        "short": "Upwork",
+        "full": "Upwork"
     },
     "description": {
         "short": "Connects agents to Upwork and provides guided workflows for hiring and finding",
-        "full": "Connects agents to Upwork and provides guided workflows for hiring and finding work."
+        "full": "The Upwork Agent Plugin equips AI agents with skills for the full hiring lifecycle: search and vet freelancer talent, draft clear and effective job posts, write tailored proposals, and manage hiring workflows. Powered by the official Upwork MCP server for secure, real-time access to your Upwork account.\n\nIn order to use this app, you need to have an active Upwork account. Please contact our support team (https://support.upwork.com) for more details.\n\nGet started: sign up or log in at https://www.upwork.com, then install this plugin and connect it to your Upwork account when prompted. A getting-started guide is available at https://www.upwork.com/ai/mcp.\n\nHelp and documentation: https://support.upwork.com"
     },
     "icons": {
         "color": "color.png",
@@ -39,11 +39,15 @@
     "agentConnectors": [
         {
             "id": "upwork",
-            "displayName": "upwork MCP Server",
+            "displayName": "Upwork MCP Server",
             "description": "Remote MCP server providing tools for upwork-agent-plugin",
             "toolSource": {
                 "remoteMcpServer": {
-                    "mcpServerUrl": "https://mcp.upwork.com/mcp"
+                    "mcpServerUrl": "https://mcp.upwork.com/mcp",
+                    "authorization": {
+                        "type": "OAuthPluginVault",
+                        "referenceId": "NjQ5MjY1YjctOWExYy00MzdjLWEyZmQtZTY3MTE0NGNmYjFhIyNkYmMxMzI3ZC1jZTAzLTRkMzktOTU1Mi1kYjNmMDA1NTFkMGM="
+                    }
                 }
             }
         }
