@@ -1,6 +1,6 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "app-6a75165ed2d8819182548553aa4cb6d5",
+  "name": "upwork-agent-plugin",
   "version": "0.1.1",
   "description": "Connects agents to Upwork and provides guided workflows for hiring and finding work.",
   "author": {
